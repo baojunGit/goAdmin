@@ -1,0 +1,7 @@
+mysql:
+  host: 1.12.217.174
+  port: 3306
+  username: root
+  password: Password@3883784!
+  dbname: testdb
+  timeout: 5s
