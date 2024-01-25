@@ -28,10 +28,11 @@ func InitConfig(ctx context.Context, configDir string) error {
 	// 使用 Viper 库设置配置文件的类型
 	viper.SetConfigType("yaml")
 	if configDir == "" {
-		configDir = "./config"
+		// .代表项目根目录
+		configDir = "."
 	}
 	// 使用 Viper 库设置要读取的配置文件路径
-	viper.SetConfigFile(fmt.Sprintf("%s/config.yml", configDir))
+	viper.SetConfigFile(fmt.Sprintf("%s/config.yaml", configDir))
 
 	// 使用 Viper 库来读取和解析配置文件
 	err := viper.ReadInConfig()
