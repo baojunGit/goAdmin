@@ -36,7 +36,7 @@ func InitConfig(ctx context.Context, configDir string) error {
 
 	// 使用 Viper 库来读取和解析配置文件
 	err := viper.ReadInConfig()
-	// 使用 errors 包中的 Wrap 函数来包装错误，提供更多的错误信息和上下文信息
+	// 使用 custom_error 包中的 Wrap 函数来包装错误，提供更多的错误信息和上下文信息
 	if err != nil {
 		return errors.Wrap(err, "ReadInConfig")
 	}

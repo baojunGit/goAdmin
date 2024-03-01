@@ -14,10 +14,14 @@ import (
 	"time"
 )
 
-func InitDB() {
+// 写成大写DB，外面的包可以使用
+var DB *gorm.DB
+var err error
+
+func InitDB(configPath string) {
 	// 初始化配置
 	// configDir参数为空字符串，它会使用默认的配置文件目录"./config"
-	err := config.InitConfig(context.Background(), "")
+	err = config.InitConfig(context.Background(), configPath)
 	if err != nil {
 		// 处理配置初始化错误
 		fmt.Println("Failed to initialize config:", err)
@@ -37,7 +41,7 @@ func InitDB() {
 		},
 	)
 
-	DB, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
+	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
 		// 打印原始的sql和错误
 		Logger: newLogger,
 		NamingStrategy: schema.NamingStrategy{
@@ -54,5 +58,5 @@ func InitDB() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	//fmt.Println("连接成功")
+	fmt.Println("连接成功")
 }
