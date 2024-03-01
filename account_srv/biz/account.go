@@ -3,11 +3,12 @@ package biz
 import (
 	"context"
 	"crypto/md5"
+	"fmt"
 	"github.com/anaskhan96/go-password-encoder"
+	"github.com/baojunGit/goAdmin/account_srv/initialize"
+	"github.com/baojunGit/goAdmin/account_srv/model"
+	"github.com/baojunGit/goAdmin/account_srv/proto/pb"
 	"github.com/baojunGit/goAdmin/exception"
-	"github.com/baojunGit/goAdmin/initialize"
-	"github.com/baojunGit/goAdmin/model"
-	"github.com/baojunGit/goAdmin/proto/pb"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 )
@@ -101,6 +102,8 @@ func (a *AccountServer) AddAccount(ctx context.Context, req *pb.AddAccountReques
 	salt, encodePwd := password.Encode(req.Password, &options)
 	account.Salt = salt
 	account.Password = encodePwd
+	fmt.Println(account)
+	fmt.Println(&account)
 	r := initialize.DB.Create(&account)
 	if r.Error != nil {
 		return nil, errors.New(exception.InternalError)
@@ -109,10 +112,37 @@ func (a *AccountServer) AddAccount(ctx context.Context, req *pb.AddAccountReques
 	return accountRes, nil
 }
 func (a *AccountServer) UpdateAccount(ctx context.Context, req *pb.UpdateAccountRequest) (*pb.UpdateAccountRes, error) {
+	var account model.Account
+	result := initialize.DB.First(&account, req.Id)
+	if result.RowsAffected == 0 {
+		return nil, errors.New(exception.AccountNotFound)
+	}
+	account.Mobile = req.Mobile
+	account.NickName = req.Nickname
+	account.Gender = req.Gender
+	r := initialize.DB.Save(&account)
+	if r.Error != nil {
+		return nil, errors.New(exception.InternalError)
+	}
 	return &pb.UpdateAccountRes{Result: true}, nil
 }
 func (a *AccountServer) CheckPassword(ctx context.Context, req *pb.CheckPasswordRequest) (*pb.CheckPasswordRes, error) {
-	return &pb.CheckPasswordRes{Result: true}, nil
+	var account model.Account
+	result := initialize.DB.First(&account, req.AccountId)
+	if result.Error != nil {
+		return nil, errors.New(exception.InternalError)
+	}
+	if account.Salt == "" {
+		return nil, errors.New(exception.SaltError)
+	}
+	options := password.Options{
+		SaltLen:      16,
+		Iterations:   100,
+		KeyLen:       32,
+		HashFunction: md5.New,
+	}
+	r := password.Verify(req.Password, account.Salt, account.Password, &options)
+	return &pb.CheckPasswordRes{Result: r}, nil
 }
 
 // mustEmbedUnimplementedAccountServiceServer 该方法是一个占位符没有实际的逻辑，只是为了满足编译器对接口的要求

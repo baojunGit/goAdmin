@@ -3,9 +3,9 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/baojunGit/goAdmin/biz"
-	"github.com/baojunGit/goAdmin/initialize"
-	"github.com/baojunGit/goAdmin/proto/pb"
+	"github.com/baojunGit/goAdmin/account_srv/biz"
+	"github.com/baojunGit/goAdmin/account_srv/initialize"
+	"github.com/baojunGit/goAdmin/account_srv/proto/pb"
 	"google.golang.org/grpc"
 	"net"
 )

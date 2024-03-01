@@ -3,8 +3,8 @@ package initialize
 import (
 	"context"
 	"fmt"
-	"github.com/baojunGit/goAdmin/config"
-	"github.com/baojunGit/goAdmin/model"
+	"github.com/baojunGit/goAdmin/account_srv/config"
+	"github.com/baojunGit/goAdmin/account_srv/model"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
