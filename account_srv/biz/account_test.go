@@ -9,7 +9,7 @@ import (
 )
 
 func init() {
-	initialize.InitDB("../")
+	initialize.InitDB("../config")
 }
 
 func TestAccountServer_AddAccount(t *testing.T) {

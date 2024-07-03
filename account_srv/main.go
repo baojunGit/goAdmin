@@ -11,7 +11,8 @@ import (
 )
 
 func init() {
-	initialize.InitDB("")
+	// 将相对路径转为绝对路径
+	initialize.InitDB("./config")
 }
 
 func main() {
